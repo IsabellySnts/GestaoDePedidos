@@ -3,7 +3,6 @@ package com.cantinagomes.gestaopedidos.restcontroller;
 
 import java.net.URI;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
@@ -11,16 +10,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-
 import com.cantinagomes.gestaopedidos.model.Categoria;
 import com.cantinagomes.gestaopedidos.model.Erro;
+import com.cantinagomes.gestaopedidos.model.Produto;
 import com.cantinagomes.gestaopedidos.repository.RepositoryCategoria;
+import com.cantinagomes.gestaopedidos.repository.RepositoryProduto;
 
 
 @RequestMapping("/api/categoria")
@@ -39,7 +39,7 @@ public class CategoriaRestController {
 		 try {
 			
 			categoriaRepository.save(categoria);
-			return ResponseEntity.created(URI.create("/"+categoria.getID())).body(categoria);
+			return ResponseEntity.created(URI.create("/"+categoria.getId())).body(categoria);
 			
 		} catch (DataIntegrityViolationException e) {
 			e.printStackTrace();
@@ -53,19 +53,20 @@ public class CategoriaRestController {
 	
 	
 	//Método para editar categorias
-	@RequestMapping(value = "/{ID}", method = RequestMethod.PUT)
-	public ResponseEntity<Void> editarCategoria(@RequestBody Categoria categoria, @PathVariable("ID") Long idCategoria){
+	@PutMapping("/{ID}")
+	public ResponseEntity<Categoria> editarCategoria(@RequestBody Categoria categoria, @PathVariable("ID") Long idCategoria){
 		
 		
-		//verificando se está inserindo o id correto
-		if(idCategoria != categoria.getID()){
-			throw new RuntimeException("ID Inválido!");
+		//verificando se o id existe
+		if(!categoriaRepository.existsById(idCategoria)) {
+			
+			return ResponseEntity.notFound().build();
 		}
 		
+		categoria.setId(idCategoria);
 		categoriaRepository.save(categoria);
-		HttpHeaders header = new HttpHeaders();
-		header.setLocation(URI.create("/api/categoria"));
-		return new ResponseEntity<Void>(header, HttpStatus.OK);
+		
+		return ResponseEntity.ok(categoria);
 	}
 	
 	

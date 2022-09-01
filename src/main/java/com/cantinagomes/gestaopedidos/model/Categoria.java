@@ -14,7 +14,7 @@ public class Categoria {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long ID;
+	private Long id;
 	private String categoria;
 	@Column(columnDefinition = "TEXT")
 	private String fotos;
