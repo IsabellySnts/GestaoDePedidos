@@ -97,34 +97,5 @@ public class ProdutosRestController {
 		}
 	}
 	
-	//buscando produtos pelo preco 
 	
-	@GetMapping
-	public ResponseEntity<Produto> findProductByPreco (@PathVariable ("preco") int preco){
-		
-		
-		Optional<Produto> produto = produtoRepository.findByPreco(preco);
-		
-		if(produto.isPresent()) {
-			
-			return ResponseEntity.ok(produto.get());
-		}else {
-			
-			return ResponseEntity.notFound().build();
-		}
-	}
-	
-	@GetMapping
-	public ResponseEntity<Produto> findProductByCategoria (@PathVariable("categoria") String categoria){
-		
-		Optional<Produto> product = produtoRepository.findByCategoria(categoria);
-		
-		if(product.isPresent()) {
-			
-			return ResponseEntity.ok(product.get());
-		}else {
-			
-			return ResponseEntity.notFound().build();
-		}
-	}
 }
