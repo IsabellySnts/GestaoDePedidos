@@ -1,7 +1,8 @@
 package com.cantinagomes.gestaopedidos.restcontroller;
 
 import java.net.URI;
-import java.util.Optional;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import com.cantinagomes.gestaopedidos.model.Erro;
@@ -30,6 +32,7 @@ public class ProdutosRestController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<Object> createProduct (@RequestBody Produto produto){
+		
 		
 		try {
 			
@@ -77,23 +80,6 @@ public class ProdutosRestController {
 			produtoRepository.deleteById(id);
 			
 			return ResponseEntity.noContent().build();
-		}
-	}
-	
-	
-	//buscando produtos pelo nome 
-	@GetMapping("/{nome}")
-	public ResponseEntity<Produto> findProductByNome (@PathVariable ("nome") String nomeCategoria){
-	
-		Optional<Produto> produto = produtoRepository.findBynome(nomeCategoria);
-		
-		if(produto.isPresent()) {
-			
-			return ResponseEntity.ok(produto.get());
-			
-		}else {
-			
-			return ResponseEntity.notFound().build();
 		}
 	}
 	

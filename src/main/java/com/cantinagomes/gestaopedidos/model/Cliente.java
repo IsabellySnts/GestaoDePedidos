@@ -7,7 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import com.cantinagomes.gestaopedidos.util.HashUtil;
+import org.jasypt.util.password.BasicPasswordEncryptor;
+
 
 
 import lombok.Data;
@@ -25,15 +26,24 @@ public class Cliente {
 	@Email
 	@Column(unique = true)
 	private String email;
+	@Column(unique = true)
 	private String identificador;
 	@NotEmpty
 	private String senha;
 	private TipoCliente tipoCliente;
 	
 	
+
 	public void setSenha(String senha) {
-		this.senha = HashUtil.hash256(senha);
+		
+	
+		BasicPasswordEncryptor basicPasswowrdEncryptor = new BasicPasswordEncryptor();
+		
+		String senhaCriptografada = basicPasswowrdEncryptor.encryptPassword("criptografiasenhausuario");
+		
+		 this.senha = senhaCriptografada;
 	}
+	
 	
 	
 	

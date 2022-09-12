@@ -2,7 +2,6 @@ package com.cantinagomes.gestaopedidos.restcontroller;
 
 import java.net.URI;
 import java.util.Optional;
-
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -34,6 +33,8 @@ public class ClienteRestController {
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> create (@Valid @RequestBody Cliente cliente) {
 		
+		
+		
 		try {
 			
 			repositoryCliente.save(cliente);
@@ -44,7 +45,7 @@ public class ClienteRestController {
 			e.printStackTrace();
 			Erro erro = new Erro();
 			erro.setStatusCode(500);
-			erro.setMensagem("Erro de Constraint: Parece que já existe um email como este!");
+			erro.setMensagem("Parece que já existe um email como este!");
 			erro.setException(e.getClass().getName());
 			return new ResponseEntity<Object>(erro, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
