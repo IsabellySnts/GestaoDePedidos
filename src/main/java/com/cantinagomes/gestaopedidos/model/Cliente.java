@@ -7,9 +7,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+
 import org.jasypt.util.password.BasicPasswordEncryptor;
-
-
+import org.jasypt.util.text.BasicTextEncryptor;
 
 import lombok.Data;
 
@@ -18,7 +18,7 @@ import lombok.Data;
 public class Cliente {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY )
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idCliente;
 	@NotEmpty
 	private String nome;
@@ -28,23 +28,47 @@ public class Cliente {
 	private String email;
 	@Column(unique = true)
 	private String identificador;
-	@NotEmpty
 	private String senha;
 	private TipoCliente tipoCliente;
-	
-	
 
 	public void setSenha(String senha) {
+
+		BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
 		
+		String senhaCriptografada = passwordEncryptor.encryptPassword(senha);
+		
+		this.senha = senhaCriptografada;
+
+	}
+
 	
-		BasicPasswordEncryptor basicPasswowrdEncryptor = new BasicPasswordEncryptor();
-		
-		String senhaCriptografada = basicPasswowrdEncryptor.encryptPassword("criptografiasenhausuario");
-		
-		 this.senha = senhaCriptografada;
+
+	public void setIdentificador(String identificador) {
+
+		BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
+
+		textEncryptor.setPasswordCharArray("identificadorcrip".toCharArray());
+
+		String idcrip = textEncryptor.encrypt(identificador);
+
+		System.out.println(idcrip);
+
+		this.identificador = idcrip;
+
 	}
 	
-	
-	
-	
+
+	public String getIdentificador() {
+
+		BasicTextEncryptor basicTextEncryptor = new BasicTextEncryptor();
+
+		basicTextEncryptor.setPasswordCharArray("identificadorcrip".toCharArray());
+
+		String iddesc = basicTextEncryptor.decrypt(identificador);
+
+		System.out.println(iddesc);
+
+		return identificador = iddesc;
+	}
+
 }

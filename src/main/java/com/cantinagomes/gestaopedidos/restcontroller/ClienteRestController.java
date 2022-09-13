@@ -85,7 +85,7 @@ public class ClienteRestController {
 	}
 	
 	
-	@GetMapping("/{nome}")
+	@GetMapping(value = "/{nome}")
 	public ResponseEntity<Cliente> findByNome (@PathVariable("nome") String nome ){
 		
 		Optional<Cliente> cliente = repositoryCliente.findByNome(nome);
@@ -100,20 +100,8 @@ public class ClienteRestController {
 	}
 	
 	
-	@GetMapping("/{email}")
-	public ResponseEntity<Cliente> findByEmail (@PathVariable("email") String email){
-		
-		Optional<Cliente> emailCliente = repositoryCliente.findByEmail(email);
-		
-		if(emailCliente.isPresent()) {
-			
-			return ResponseEntity.ok(emailCliente.get());
-			
-		}else {
-			
-			return ResponseEntity.notFound().build();
-		}
-	}
+	
+	
 	
 	
 	
