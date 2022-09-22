@@ -1,6 +1,7 @@
 package com.cantinagomes.gestaopedidos.restcontroller;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,27 +21,26 @@ import com.cantinagomes.gestaopedidos.model.Cliente;
 import com.cantinagomes.gestaopedidos.model.Erro;
 import com.cantinagomes.gestaopedidos.repository.RepositoryCliente;
 
-
 @RequestMapping("api/clientes")
 @RestController
 public class ClienteRestController {
-	
+
 	@Autowired
 	private RepositoryCliente repositoryCliente;
-	
-	
-	//metodo para criar um usuario cliente
+
+	@Autowired
+	JavaMailApp email;
+
+	// metodo para criar um usuario cliente
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> create (@Valid @RequestBody Cliente cliente) {
-		
-		
-		
+	public ResponseEntity<Object> create(@Valid @RequestBody Cliente cliente) {
+
 		try {
-			
+
 			repositoryCliente.save(cliente);
-			
-			return ResponseEntity.created(URI.create("/"+cliente.getIdCliente())).body(cliente);
-			
+
+			return ResponseEntity.created(URI.create("/" + cliente.getIdCliente())).body(cliente);
+
 		} catch (DataIntegrityViolationException e) {
 			e.printStackTrace();
 			Erro erro = new Erro();
@@ -50,61 +50,62 @@ public class ClienteRestController {
 			return new ResponseEntity<Object>(erro, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
-	//metodo para atualizar
-	@PutMapping("/{idCliente}")
-	public ResponseEntity<Cliente> update (@RequestBody Cliente cliente, @PathVariable("idCliente") Long id ){
-	
-		if(!repositoryCliente.existsById(id)) {
-			
-			return ResponseEntity.notFound().build();
-		}else {
-			
-			cliente.setIdCliente(id);
-			repositoryCliente.save(cliente);
+
+	// metodo para atualizar
+	@PutMapping("/{identificador}")
+	public ResponseEntity<Cliente> update(@RequestBody Cliente cliente, @PathVariable("identificador") Long id) {
+
+		List<Cliente> identificadores = repositoryCliente.findByIdentificador(cliente.getIdentificador());
+
+		for (Cliente clienteident : identificadores) {
+
+			if (clienteident.getIdentificador().equals(cliente.getIdentificador())) {
+
+				email.sendEmail();
+
+			} else {
+
+				return ResponseEntity.notFound().build();
+			}
+
 		}
-		
+
+
 		return ResponseEntity.ok(cliente);
 	}
-	
-	
-	//metodo para deletar um cliente
+
+	// metodo para deletar um cliente
 	@DeleteMapping("/{idCliente}")
-	public ResponseEntity<Void> delete (@PathVariable ("idCliente") Long id){
-		
-		if(!repositoryCliente.existsById(id)) {
-			
+	public ResponseEntity<Void> delete(@PathVariable("idCliente") Long id) {
+
+		if (!repositoryCliente.existsById(id)) {
+
 			return ResponseEntity.notFound().build();
-			
-		}else {
-			
+
+		} else {
+
 			repositoryCliente.deleteById(id);
-			
+
 			return ResponseEntity.noContent().build();
 		}
 	}
-	
-	
+
 	@GetMapping(value = "/{nome}")
-	public ResponseEntity<Cliente> findByNome (@PathVariable("nome") String nome ){
-		
+	public ResponseEntity<Cliente> findByNome(@PathVariable("nome") String nome) {
+
 		Optional<Cliente> cliente = repositoryCliente.findByNome(nome);
-		
-		if(cliente.isPresent()) {
-			
+
+		if (cliente.isPresent()) {
+
 			return ResponseEntity.ok(cliente.get());
-		}else {
-			
+		} else {
+
 			return ResponseEntity.notFound().build();
 		}
 	}
 	
 	
-	
-	
-	
-	
-	
+
 	
 
 }

@@ -28,6 +28,7 @@ public class Cliente {
 	private String email;
 	@Column(unique = true)
 	private String identificador;
+	private String phone;
 	private String senha;
 	private TipoCliente tipoCliente;
 

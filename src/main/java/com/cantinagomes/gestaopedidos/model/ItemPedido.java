@@ -1,25 +1,25 @@
 package com.cantinagomes.gestaopedidos.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.validation.constraints.NotEmpty;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import lombok.Data;
 
-@Data
 @Entity
-public class Categoria {
-	
+@Data
+public class ItemPedido {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@NotEmpty
-	@Column(unique = true)
-	private String categoria;
-	@Column(columnDefinition = "LONGTEXT")
-	private String fotos;
-
+	@OneToOne
+	private Produto produto;
+	@ManyToOne
+	private Pedido idPedido;
+	private int quantidade;
+	
 }
