@@ -3,6 +3,8 @@ package com.cantinagomes.gestaopedidos.restcontroller;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
+
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -38,7 +40,7 @@ public class ClienteRestController {
 		try {
 
 			repositoryCliente.save(cliente);
-
+			email.sendEmail(null);
 			return ResponseEntity.created(URI.create("/" + cliente.getIdCliente())).body(cliente);
 
 		} catch (DataIntegrityViolationException e) {
@@ -55,13 +57,19 @@ public class ClienteRestController {
 	@PutMapping("/{identificador}")
 	public ResponseEntity<Cliente> update(@RequestBody Cliente cliente, @PathVariable("identificador") Long id) {
 
-		List<Cliente> identificadores = repositoryCliente.findByIdentificador(cliente.getIdentificador());
+		List<Cliente> identificadores = repositoryCliente.findByIdentificador("isabellyd429@gmail.com");
+		
+		List<Cliente> codigoVerificacao  = repositoryCliente.findByCodigo(cliente.getCodigo());
 
 		for (Cliente clienteident : identificadores) {
 
 			if (clienteident.getIdentificador().equals(cliente.getIdentificador())) {
 
-				email.sendEmail();
+				Random codigoverif = new Random();
+				cliente.setCodigo(codigoverif.nextInt(1000));
+				repositoryCliente.save(cliente);
+				
+				
 
 			} else {
 
@@ -69,7 +77,8 @@ public class ClienteRestController {
 			}
 
 		}
-
+		
+		
 
 		return ResponseEntity.ok(cliente);
 	}
@@ -85,6 +94,7 @@ public class ClienteRestController {
 		} else {
 
 			repositoryCliente.deleteById(id);
+			
 
 			return ResponseEntity.noContent().build();
 		}

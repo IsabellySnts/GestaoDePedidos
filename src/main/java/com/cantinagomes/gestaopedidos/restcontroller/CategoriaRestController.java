@@ -81,7 +81,7 @@ public class CategoriaRestController {
 	}
 	
 
-	@GetMapping
+	@GetMapping(value = "findall")
 	public Page<Categoria> findCategoria (Pageable pageable){
 		
 		return categoriaRepository.findAll(pageable);
