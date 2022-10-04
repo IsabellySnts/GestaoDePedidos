@@ -10,26 +10,29 @@ import javax.mail.internet.MimeMessage;
 import org.springframework.stereotype.Service;
 import com.cantinagomes.gestaopedidos.model.Cliente;
 
-
+@Service
 public class JavaMailApp {
 
-	 public static void main(String[] args) {
-	}	
+	
+		
 
 	public void sendEmail(Cliente cliente) {
+		
+		
+		
 		Properties props = new Properties();
 		/** Parâmetros de conexão com servidor Yahoo */
 		props.put("mail.smtp.host", "smtp.mail.yahoo.com");
-        props.put("mail.smtp.socketFactory.port", "465");
+        //props.put("mail.smtp.socketFactory.port", "587");
         props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.port", "25");
+        props.put("mail.smtp.port", "587");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.ssl.protocols=TLSv1.2", "true");
         props.put("mail.smtp.ssl.trust", "*");
 
-		Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
+		Session session = Session.getInstance(props, new javax.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication("ds.isabelly05@yahoo.com", "yahoostarqueza10");
+				return new PasswordAuthentication("joao.silva1764321@yahoo.com", "wxjvsytyjezrwomj");
 			}
 		});
 
@@ -40,10 +43,11 @@ public class JavaMailApp {
 
 			
 			Message message = new MimeMessage(session);
-			message.setFrom(new InternetAddress("ds.isabelly05@yahoo.com")); // Remetente
+			message.setFrom(new InternetAddress("joao.silva1764321@yahoo.com")); // Remetente
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("isabellyd429@gmail.com")); // Destinatário(s)
 			message.setSubject("Alteração de senha ");// Assunto
-			message.setText("Esse é seu código de verificação" + cliente.getCodigo());
+			message.setText("Olá, "  +cliente.getNome() + ".  Aparentemente, você esqueceu sua senha, para redefini-la use esse código de verificacao: " + cliente.getCodigo());
+			
 			/** Método para enviar a mensagem criada */
 			Transport.send(message);
 

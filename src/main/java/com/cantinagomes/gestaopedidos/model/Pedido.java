@@ -1,12 +1,14 @@
 package com.cantinagomes.gestaopedidos.model;
 
 
+
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-
+import javax.persistence.OneToMany;
 import lombok.Data;
 
 @Entity
@@ -19,6 +21,9 @@ public class Pedido {
 	private double valorTotal;
 	private double dinheiro;
 	private double troco;
+	@OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
+	private List<ItemPedido> itens;
+
 	
 	
 	

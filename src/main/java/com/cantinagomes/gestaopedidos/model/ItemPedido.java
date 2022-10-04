@@ -19,7 +19,7 @@ public class ItemPedido {
 	@OneToOne
 	private Produto produto;
 	@ManyToOne
-	private Pedido idPedido;
+	private Pedido pedido;
 	private int quantidade;
 	
 }

@@ -3,11 +3,8 @@ package com.cantinagomes.gestaopedidos.restcontroller;
 
 
 import java.net.URI;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +19,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import com.cantinagomes.gestaopedidos.model.Categoria;
 import com.cantinagomes.gestaopedidos.model.Erro;
-import com.cantinagomes.gestaopedidos.model.Produto;
 import com.cantinagomes.gestaopedidos.repository.RepositoryCategoria;
 
 
@@ -80,20 +76,20 @@ public class CategoriaRestController {
 		return ResponseEntity.noContent().build();
 	}
 	
-
-	@GetMapping(value = "findall")
-	public Page<Categoria> findCategoria (Pageable pageable){
-		
-		return categoriaRepository.findAll(pageable);
-	}
+	@GetMapping(value = "/findAll")
+    public ResponseEntity<Iterable<Categoria>> findAll(){
+        Iterable<Categoria> tudo = categoriaRepository.findAll();
+        return new ResponseEntity<Iterable<Categoria>>(tudo, HttpStatus.OK);    
+    
+    }
 	
-
+	/*
 	@GetMapping(value = "/buscarPorCategoria/{nomeCat}")
     public ResponseEntity<List<Produto>> buscarPorCategoria(@PathVariable("nomeCat") String nomeCat){
         List<Produto> acesso = categoriaRepository.buscarPorCategoria(nomeCat.toUpperCase());
         return new ResponseEntity<List<Produto>>(acesso, HttpStatus.OK);    
     
 	}
-	
+	*/
 
 }

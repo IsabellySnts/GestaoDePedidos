@@ -1,14 +1,11 @@
 package com.cantinagomes.gestaopedidos.model;
 
-import java.util.Random;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
 import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.jasypt.util.text.BasicTextEncryptor;
 import lombok.Data;
@@ -20,9 +17,7 @@ public class Cliente {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idCliente;
-	@NotEmpty
 	private String nome;
-	@NotEmpty
 	@Email
 	@Column(unique = true)
 	private String email;
